@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deploy OK</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      background: #070b14;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    /* animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridDrift 20s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes gridDrift { to { background-position: 48px 48px; } }
+
+    .card {
+      position: relative;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56,189,248,.2);
+      border-radius: 24px;
+      padding: 56px 64px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      box-shadow:
+        0 0 0 1px rgba(56,189,248,.05),
+        0 32px 80px rgba(0,0,0,.6),
+        0 0 120px rgba(56,189,248,.06) inset;
+      animation: fadeUp .6s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* glowing ring */
+    .ring {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 40px;
+      border-radius: 50%;
+      background: conic-gradient(from 180deg, #38bdf8, #818cf8, #34d399, #38bdf8);
+      padding: 3px;
+      animation: spin 4s linear infinite;
+      box-shadow: 0 0 40px rgba(56,189,248,.35);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .ring-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #0f172a;
+      display: grid;
+      place-items: center;
+    }
+
+    .check {
+      font-size: 48px;
+      line-height: 1;
+      animation: pop .4s .5s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes pop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -.5px;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #34d399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .sub {
+      font-size: .95rem;
+      color: #64748b;
+      margin-bottom: 40px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(100,116,139,.25);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: .82rem;
+      color: #94a3b8;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 6px #34d399;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .4; }
+    }
+    .badge-val {
+      color: #e2e8f0;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="ring"><div class="ring-inner"><span class="check">✓</span></div></div>
+    <h1>Deploy Successful</h1>
+    <p class="sub">Service is up and running</p>
+    <div class="badges">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>host</span>
+        <span class="badge-val" id="host">—</span>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>time</span>
+        <span class="badge-val" id="ts">—</span>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>status</span>
+        <span class="badge-val">200 OK</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('host').textContent = location.hostname || 'localhost';
+    function tick() {
+      document.getElementById('ts').textContent =
+        new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
